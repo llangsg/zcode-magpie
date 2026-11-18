@@ -1,0 +1,52 @@
+{
+  "name": "zcode-magpie",
+  "version": "0.1.68",
+  "description": "Standalone Magpie ZCode provider plugin with dynamic promotional claims and CAPTCHA support",
+  "type": "module",
+  "main": "./index.mjs",
+  "exports": {
+    ".": "./index.mjs"
+  },
+  "files": [
+    "index.mjs",
+    "prompt.mjs",
+    "captcha.mjs",
+    "captcha-happy.mjs",
+    "README.md",
+    "THIRD_PARTY_NOTICES.md",
+    "LICENSE",
+    "third_party/TRIDEFENDER-LICENSE"
+  ],
+  "keywords": [
+    "magpie",
+    "magpie-plugin",
+    "zcode",
+    "z.ai",
+    "bigmodel",
+    "glm",
+    "coding-plan",
+    "promotional-claims"
+  ],
+  "license": "SEE LICENSES",
+  "magpie": {
+    "maxConcurrency": 3
+  },
+  "dependencies": {
+    "happy-dom": "^20.11.6",
+    "undici": "^8.10.0"
+  },
+  "scripts": {
+    "test": "bun test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/llangsg/zcode-magpie.git"
+  },
+  "homepage": "https://github.com/llangsg/zcode-magpie#readme",
+  "bugs": {
+    "url": "https://github.com/llangsg/zcode-magpie/issues"
+  }
+}
