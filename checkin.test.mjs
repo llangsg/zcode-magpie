@@ -153,7 +153,7 @@ test("nothing to claim: inactive, and no claim is asked", async () => {
   expect(Number(t.url.searchParams.get("seq"))).toBeGreaterThanOrEqual(0)
   expect(t.headers.Authorization).toBe("Bearer " + TOKEN)
   expect(t.headers["X-Device-Mid"]).toBe(DEVICE)
-  expect(t.headers["X-ZCode-App-Version"]).toBe("3.17.2")
+  expect(t.headers["X-ZCode-App-Version"]).toBe("3.18.2")
   expect(t.headers["X-Client-Language"]).toBeTruthy()
 })
 
@@ -188,7 +188,7 @@ test("one plan to claim, claimed with code 0", async () => {
   expect(JSON.parse(c.body)).toEqual({ plan_id: TRUST })
   expect(c.headers.Authorization).toBe("Bearer " + TOKEN)
   expect(c.headers["X-Device-Mid"]).toBe(DEVICE)
-  expect(c.headers["X-ZCode-App-Version"]).toBe("3.17.2")
+  expect(c.headers["X-ZCode-App-Version"]).toBe("3.18.2")
   expect(c.headers["X-Platform"]).toBe(`${process.platform}-${process.arch}`)
   expect(c.headers["Content-Type"]).toBe("application/json")
   // the route is read again, so the next request uses the plan
@@ -390,7 +390,7 @@ test("a banner plan is claimed from the app's marketing feed", async () => {
   expect(Number(t.url.searchParams.get("seq"))).toBeGreaterThanOrEqual(0)
   expect(t.headers.Authorization).toBe("Bearer " + TOKEN)
   expect(t.headers["X-Device-Mid"]).toBe(DEVICE)
-  expect(t.headers["X-ZCode-App-Version"]).toBe("3.17.2")
+  expect(t.headers["X-ZCode-App-Version"]).toBe("3.18.2")
   expect(t.headers["X-Client-Language"]).toBeTruthy()
   expect(calls.find(c => c.url.pathname === ACTION)).toBeTruthy()
   // asked again, the plan answers 1003: done
@@ -432,6 +432,19 @@ test("a feed that doesn't read is failed (unknown), never nothing to claim", asy
 // background, resource_position and priority, and a success_popup whose
 // own buttons (navigate, copy_text) and hero repeat the zcode_plan.
 const TOUCH_REAL = readFileSync(new URL("./testdata/touch-1030-wk.json", import.meta.url), "utf8")
+
+test("a sign-in without a saved device uses one persistent UUID for feed and claim", async () => {
+  const calls = serve(({ url, method }) => {
+    if (url.pathname === TOUCH && method === "GET") return json(TOUCH_REAL)
+    if (url.pathname === CLAIM && method === "POST") return json(CLAIMED_WEEKEND)
+  })
+  await checkin(oauth({ site: "zai", jwt: TOKEN }))
+  const feed = calls.find((c) => c.url.pathname === TOUCH)
+  const claim = calls.find((c) => c.url.pathname === CLAIM)
+  expect(feed.headers["X-Device-Mid"]).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i)
+  expect(claim.headers["X-Device-Mid"]).toBe(feed.headers["X-Device-Mid"])
+  expect(claim.headers["X-ZCode-App-Version"]).toBe("3.18.2")
+})
 
 test("the real banner feed: its one claim button is claimed, by the plan's name", async () => {
   const calls = claimWith((id) => (id === WEEKEND ? json(CLAIMED_WEEKEND) : json("", 404)), TOUCH_REAL)
@@ -508,7 +521,7 @@ test("a claim with CAPTCHA enabled is solved and sent with TriDefender verificat
   const claim = claims(calls)[0]
   expect(claim.headers["X-Aliyun-Captcha-Verify-Param"]).toBe("proof-1")
   expect(claim.headers["X-Aliyun-Captcha-Verify-Region"]).toBe("cn")
-  expect(claim.headers["X-ZCode-App-Version"]).toBe("3.17.2")
+  expect(claim.headers["X-ZCode-App-Version"]).toBe("3.18.2")
   expect(claim.headers["X-Platform"]).toBeTruthy()
   const action = calls.find(c => c.url.pathname === ACTION)
   expect(JSON.parse(action.body)).toEqual({ campaign_id: "2101141259813175296", action_type: "confirm" })

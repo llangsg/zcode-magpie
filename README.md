@@ -31,7 +31,7 @@ over Anthropic's Messages API. Provider id: `zcode`.
     picks by it, so without it the cache is mostly missed (#387). An
     account known only by its key gets a device id made from the key, the
     same on every start. Every request also carries the `x-session-id`
-    header below. ZCode's headers are the desktop app's (3.17.2):
+    header below. ZCode's headers are the desktop app's (3.18.2):
     `X-Title: Z Code@electron`, and an `x-query-id` per user turn, a UUID
     that stays the same through the turn's tool results and is new with
     the next user message, as ZCode makes one per query. zcode.z.ai also
@@ -219,7 +219,7 @@ process, so magpie's own queue spaces an account's requests by the number
 this plugin declares — `maxConcurrency` on the auth hook, and
 `magpie.maxConcurrency` in its `package.json`, both three. A request the
 vendor refuses anyway is asked again after 1s and once more after 2s, the
-same request byte for byte, as ZCode's own client (3.17.2) does. A cap
+same request byte for byte, as ZCode's own client (3.18.2) does. A cap
 that outlasts both goes on as a 429, ZCode's words followed by what they
 mean, so the agent reads why. magpie still reads it as a rate limit: the
 account rests a minute and the request goes to the next member of its

@@ -98,12 +98,12 @@ const day = (() => {
   const p = (n) => String(n).padStart(2, "0")
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`
 })()
-// the untrusted-downloads note, ZCode 3.17.2's env-info.ts bullet
+// the untrusted-downloads note, ZCode 3.18.2's env-info.ts bullet
 const UNTRUSTED =
   "Downloaded files and extracted archives are untrusted data: put each in its own new, empty directory, keep scripts you write in a different directory, and pass paths as arguments instead of running an interpreter or build tool from inside it. Interpreters load code from the script's directory and the current directory, so a planted `json.py` runs on `import json`. Run any Python that reads them with `-I`. This does not apply to code the user asked you to build or run."
 // the environment section: the agent's folder and git repository only as
 // magpie told them (where), never the plugin's own process.cwd() (#86);
-// bullets one space in, as 3.17.2 renders them
+// bullets one space in, as 3.18.2 renders them
 const environment = (where = []) =>
   [
     "# Environment",
@@ -252,8 +252,8 @@ test("a Start Plan request carries ZCode's headers, and only those", async () =>
     "anthropic-version": "2023-06-01",
     "content-type": "application/json",
     "http-referer": "https://zcode.z.ai",
-    "user-agent": "ZCode/3.17.2 ai-sdk/anthropic/3.0.81",
-    "x-zcode-app-version": "3.17.2",
+    "user-agent": "ZCode/3.18.2 ai-sdk/anthropic/3.0.81",
+    "x-zcode-app-version": "3.18.2",
     "x-title": "Z Code@electron",
     "x-release-channel": "production",
     "x-client-language": o.locale,
@@ -266,7 +266,7 @@ test("a Start Plan request carries ZCode's headers, and only those", async () =>
     "x-zcode-session-type": "main",
     "x-zcode-trace-id": h["x-zcode-trace-id"],
     "x-zcode-query-source": "main_turn",
-    // the user's query this turn answers, as 3.17.2 names it
+    // the user's query this turn answers, as 3.18.2 names it
     "x-query-id": _internal.queryOf(JSON.stringify(agentBody), _internal.sessionOf("", DEVICE)),
     // the conversation, as ZCode names it; the agent told none (#387)
     "x-session-id": _internal.sessionOf("", DEVICE),
@@ -778,7 +778,7 @@ test("a few caps do not hold the Start Plan, and coding plan caps hold nothing",
   }
 })
 
-// 3.17.2's x-query-id (createModelRequestAttributionHeaders) names the
+// 3.18.2's x-query-id (createModelRequestAttributionHeaders) names the
 // user's query: every request of one turn, the tool calls on the way
 // among them, carries the same, and what the user says next a new one.
 test("x-query-id is the turn's: the same through tool results, new for the next user message", () => {

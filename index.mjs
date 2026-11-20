@@ -34,9 +34,9 @@ const BIGMODEL_BASE = "https://open.bigmodel.cn/api/anthropic"
 const START_BASE = ZCODE + "/api/v1/zcode-plan/anthropic"
 // APP_VERSION is the ZCode this signs in and asks as, on every call. ZCode
 // gates by it: its marketing feed answers empty to an older one (#678),
-// and its Start Plan balance "judges capability by the real app_version"
-// (zaiStartPlanBilling.ts in zai-org/ZCode@a9fe401, 3.17.2).
-const APP_VERSION = "3.17.2"
+// and its Start Plan balance judges capability by app_version. The current
+// upstream client pins 3.18.2 (TriDefender/zcode-api src/config/loader.ts).
+const APP_VERSION = "3.18.2"
 const UA = "ZCode/" + APP_VERSION
 
 // ZCode's models before its config is read; the Start Plan has all but GLM-5.3.
@@ -56,13 +56,13 @@ const siteOf = (s) => (s === "bigmodel" ? "bigmodel" : "zai")
 
 const platform = () => `${process.platform}-${process.arch}` // darwin-arm64, win32-x64, linux-x64, as ZCode names them
 const uuid = () => crypto.randomUUID()
-const anyDevice = uuid() // X-Device-Mid for calls made signed out (the model list)
 // uuidOf is a version 4 shaped UUID made from a seed: the same seed gives
 // the same UUID every time
 const uuidOf = (seed) => {
   const h = createHash("sha256").update(seed).digest("hex")
   return `${h.slice(0, 8)}-${h.slice(8, 12)}-4${h.slice(13, 16)}-${((parseInt(h[16], 16) & 3) | 8).toString(16)}${h.slice(17, 20)}-${h.slice(20, 32)}`
 }
+const anyDevice = uuidOf(`${homedir()}|zcode-proxy|marketing-device-mid`)
 // keyDevice is a device id for an account known only by its key: the same
 // key gives the same id on every start, as a sign-in's saved device does
 const keyDevice = (key) => uuidOf("zcode-device\0" + key)
