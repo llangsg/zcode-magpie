@@ -1,6 +1,6 @@
 {
   "name": "zcode-magpie",
-  "version": "0.1.68",
+  "version": "0.1.69",
   "description": "Standalone Magpie ZCode provider plugin with dynamic promotional claims and CAPTCHA support",
   "type": "module",
   "main": "./index.mjs",
